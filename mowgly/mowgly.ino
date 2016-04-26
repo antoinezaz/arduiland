@@ -1,10 +1,16 @@
+unsigned long ms;
+
 void setup() {
   Serial.begin(9600);
+  while(!Serial){
+    Serial.println("Ok init finish");
+  }
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  unsigned long ms = millis(); // get the milisecond since the program is launched
-  Serial.println(ms); // print ms on serial console
+  
+  ms = millis(); // get the milisecond since the program is launched
+  Serial.print(ms); // print ms on serial console
+  Serial.print("mowgly");
   delay(1000);
 }
