@@ -2,11 +2,24 @@ int SER_PIN = 11; // pin 14 sur le 74HC595
 int RCLK_PIN = 12; // pin 12 sur le 74HC595
 int SRCLK_PIN = 8; // pin 11 sur le 74HC595
 
+int miela[10][6] = {{2,1,6,3,0,-1}, // H
+            {1,2,7,3,4,-1}, // E
+            {2,3,4,-1,-1,-1}, // L
+            {2,3,4,-1,-1,-1}, // L
+            {2,3,4,0,6,7}, //O
+            {-1,-1,-1,-1,-1,-1}, // espace
+            {2,3,7,6,0,-1}, //M
+            {2,3,-1,-1,-1,-1}, //I
+            {1,2,7,3,4,-1}, // E
+            {2,3,4,-1,-1,-1}}; // L
+
+            
 #define number_of_74hc595s 1
 #define numbOfRegisterPins number_of_74hc595s * 8
 boolean registers[numbOfRegisterPins];
 
 void setup() {
+  Serial.begin(9600);
   pinMode(SER_PIN, OUTPUT);
   pinMode(RCLK_PIN, OUTPUT);
   pinMode(SRCLK_PIN, OUTPUT);
@@ -67,6 +80,26 @@ void writeCounter() {
   delay(5000);
 }
 
+void miel(){
+  Serial.println("neme neme neme");
+  for (int i = 0; i < 10; i++)
+  {
+      for (int j = 0; j < 6; j++)
+      { 
+        if (miela[i][j] != -1)
+        {
+          setRegisterPin(miela[i][j], HIGH);
+        }
+      }
+      writeRegisters();
+      delay(1000);
+      clearRegisters();
+      writeRegisters();
+      delay(213);
+      
+  }
+}
+
 void loop() {
   setRegisterPin(0, LOW);
   setRegisterPin(1, LOW);
@@ -79,5 +112,5 @@ void loop() {
   writeRegisters(); // Doit être exécuté pour appliquer les changements
   // Executer seulement une fois que toutes les valeurs ont été enregistrées comme vous le souhaitiez
 
-  writeCounter();
+  miel();
 }
