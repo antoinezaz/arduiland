@@ -4,7 +4,7 @@ volatile int state = HIGH;
 void setup() {
   //Serial.begin(9600);
   pinMode(led, OUTPUT);
-  attachInterrupt(0, blink, CHANGE);
+  attachInterrupt(0, blink, CHANGE); // when the button is pushed, trigger the blink method
 }
 
 void loop() {
@@ -15,6 +15,6 @@ void loop() {
 
 void blink() {
   //Serial.println("change");
-  state = !state;
+  state = !state; //change state (HIGH or LOW)
 }
 
