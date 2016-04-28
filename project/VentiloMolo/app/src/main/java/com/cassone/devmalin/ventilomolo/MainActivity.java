@@ -4,16 +4,18 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.TextView;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.util.Log;
+
+import com.cassone.devmalin.ventilomolo.models.Temperature;
 import com.github.mikephil.charting.charts.LineChart;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,10 +23,10 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TEMPERATURE = "Temperature";
     private static final String TAG = "MainActivity";
-    private final static int INTERVAL = 5000;
+    private final static int INTERVAL = 1000;
     Handler mHandler =new Handler();
 
-    private ArrayList<Temperature> tabTemp;
+    private List<Temperature> tabTemp;
 
     private double minTemp = 0;
     private double maxTemp = 0;
@@ -41,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
         lineChartTemp.setBackgroundColor(Color.LTGRAY);
 
         tabTemp = new ArrayList<>();
-
         mhandlerTask.run();
     }
 
@@ -50,42 +51,31 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void run() {
-            startListenerTemp();
+            TemperatureService temperatureService = SetupTempService.setupTempService();
+            Call<List<Temperature>> call = temperatureService.getAllTemperature(TemperatureService.API_KEY);
+            call.enqueue(new Callback<List<Temperature>>() {
+                @Override
+                public void onResponse(Call<List<Temperature>> call, Response<List<Temperature>> response) {
+                    if (!response.isSuccess()) {
+                        Log.d(TAG, "error");
+                    } else {
+                        Log.d(TAG, "success");
+                        tabTemp = response.body();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Temperature>> call, Throwable t) {
+                    Log.d(TAG, "Failure" + t.toString());
+                }
+            });
+
+
             updateLineChart();
             mHandler.postDelayed(mhandlerTask, INTERVAL);
         }
     };
 
-    private void startListenerTemp(){
-        BroadcastReceiver myBroadcastReceiver = new BroadcastReceiver() {
-
-            @Override
-            public void onReceive(final Context context, final Intent intent) {
-                // Faire quelquechose au résultat
-                Temperature temp = intent.getParcelableExtra(TEMPERATURE);
-                if (temp != null){
-                    Log.v(TAG, "onPostExecute: " + temp.getId() +  " " + temp.getCelcius() + " "
-                            + temp.getFahrenheit());
-
-                    if (minTemp > temp.getCelcius() || minTemp == 0)
-                        minTemp = temp.getCelcius();
-                    else if (maxTemp < temp.getCelcius())
-                        maxTemp = temp.getCelcius();
-
-                    tabTemp.add(temp);
-                }
-            }
-        };
-
-
-        // enregistrement du BroadcastReceiver
-        IntentFilter filter = new IntentFilter("com.example.myapp.EVENT_DONE");
-        registerReceiver(myBroadcastReceiver, filter);
-
-        // lancement du service
-        Intent intent = new Intent(this, TempService.class);
-        startService(intent);
-    }
 
     public void updateLineChart() {
 
