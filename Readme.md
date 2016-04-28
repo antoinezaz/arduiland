@@ -1,28 +1,57 @@
 Project:
--------- 
+--------  
 
-Automatic spinkler (arroseur automatique)  
-
-Objective:
-----------
-
-1: Create an automatic spinkler for indoor plant.  
-2: Create an automatic fan for indoor plant if temperature is too high.  
-
-**Main goal:** Create at least one objective in four days.
+Créer un ventilateur automatique qui se déclenche en fonction de la température environnante.  
+Afficher graphiquement les données de l'activité du moteur par rapport à la température sur l'application Android native.  
+La limite de température est configurée via l'application.  
 
 Material:
 ---------
 
-- Arduino card (UNO model)  
-- Rotor motor  
-- Breadboard  
+Arduino UNO (ou MEGA):  
+	Temperature sensor    
+	Motor (continue)
+	Shield motor
+	Zigbee module  
+
+Raspberry Pi 2 B+  
+	Zigbee module  
+
+Android  
+	Native application   
+
+Server  
+	MongoLab    
+
+Communication:
+--------------
+
+Zigbee
+WiFi  
+
+Objectives:
+-----------
+
+Configuration:    
+	Configuration of temperature's limit (Android -> Raspberry -> Arduino)  
+
+Datas:    
+	Temperature datas (Sensor -> Arduino)   
+	Motor's activity datas (Motor -> Arduino)  
+
+Database:    
+	Send temperature datas to databse (Arduino -> Raspberry -> Server)  
+	Send motor datas to database (Arduino -> Raspberry -> Server)   
+
+Application:    
+	Graphics of motor and temperature datas (Android -> Server -> Android)   
 
 Programming:
 ------------
 
 C   
-Python
+Python  
+NodeJS  
 
 Team:
 -----
