@@ -12,25 +12,25 @@ La limite de température est configurée via l'application.)*
 Material:
 ---------
 
-Arduino UNO (ou MEGA):  
+**Arduino UNO (ou MEGA)**  
 	Temperature sensor    
 	Motor (continue)
 	Shield motor
 	Zigbee module  
 
-Raspberry Pi 2 B+  
+**Raspberry Pi 2 B+**  
 	Zigbee module  
 
-Android  
+**Android**  
 	Native application   
 
-Server  
+**Server**  
 	MongoLab    
 
 Communication:
 --------------
 
-Zigbee
+Zigbee  
 WiFi  
 
 Objectives:
@@ -54,7 +54,8 @@ Programming:
 ------------
 
 C   
-Python   
+Python  
+Android  
 
 Team:
 -----
