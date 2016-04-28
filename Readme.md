@@ -1,9 +1,13 @@
 Project:
 --------  
 
-Créer un ventilateur automatique qui se déclenche en fonction de la température environnante.  
+Create an automatic fan which activate regarding the current temperature.  
+On the Android application, display in graphic the motor's activity regarding temperature.  
+Configure the temperature's limite from the application to the Arduino.  
+
+(FR: Créer un ventilateur automatique qui se déclenche en fonction de la température environnante.  
 Afficher graphiquement les données de l'activité du moteur par rapport à la température sur l'application Android native.  
-La limite de température est configurée via l'application.  
+La limite de température est configurée via l'application.)  
 
 Material:
 ---------
@@ -50,8 +54,7 @@ Programming:
 ------------
 
 C   
-Python  
-NodeJS  
+Python   
 
 Team:
 -----
