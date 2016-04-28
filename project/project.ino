@@ -24,10 +24,13 @@
 // as the current DHT reading algorithm adjusts itself to work on faster procs.
 DHT dht(DHTPIN, DHTTYPE);
 
+const int LED_TEMP = 12;
+
 void setup() {
   Serial.begin(9600);
   Serial.println("DHTxx test!");
-
+  pinMode (LED_TEMP, OUTPUT);
+  
   dht.begin();
 }
 
@@ -67,4 +70,15 @@ void loop() {
   Serial.print(" *C ");
   Serial.print(hif);
   Serial.println(" *F");
+
+  isHot(t);
 }
+
+void isHot(float temp)
+{
+  if (temp >= 25.0)
+    digitalWrite(LED_TEMP, HIGH);
+  else
+    digitalWrite(LED_TEMP, LOW);
+}
+
