@@ -14,6 +14,7 @@
 #define SLAVE_ADDRESS 0x55
 
 DHT dht(DHTPIN, DHTTYPE);
+const int LED_TEMP = 12;
 int dataReceived = 0;
 float humidity;
 float temperature;
@@ -25,6 +26,7 @@ void setup() {
   Wire.begin(SLAVE_ADDRESS);
   Wire.onReceive(receiveData);
   Wire.onRequest(sendData);
+  pinMode (LED_TEMP, OUTPUT);
   dht.begin();
 }
 
@@ -41,7 +43,7 @@ void loop() {
   }
 
   // float hif = dht.computeHeatIndex(farenheit, humidity);
-  //float hic = dht.computeHeatIndex(temperature, humidity, false);
+  // float hic = dht.computeHeatIndex(temperature, humidity, false);
 
   Serial.print("Humidity: ");
   Serial.print(humidity);
@@ -58,6 +60,7 @@ void loop() {
   Serial.println(" *F");*/
 
   Serial.println("");
+  isHot(t);
 }
 
 void receiveData(int byteCount) {
@@ -82,3 +85,11 @@ void sendData() {
     }
     Wire.write((byte) dataResponse);
 }
+
+void isHot(float temp) {
+  if (temp >= 22.0)
+    digitalWrite(LED_TEMP, HIGH);
+  else
+    digitalWrite(LED_TEMP, LOW);
+}
+
