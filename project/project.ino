@@ -26,7 +26,7 @@ void setup() {
   Wire.begin(SLAVE_ADDRESS);
   Wire.onReceive(receiveData);
   Wire.onRequest(sendData);
-  pinMode (LED_TEMP, OUTPUT);
+  pinMode(LED_TEMP, OUTPUT);
   dht.begin();
 }
 
@@ -60,7 +60,7 @@ void loop() {
   Serial.println(" *F");*/
 
   Serial.println("");
-  isHot(t);
+  isHot(temperature);
 }
 
 void receiveData(int byteCount) {
@@ -87,7 +87,7 @@ void sendData() {
 }
 
 void isHot(float temp) {
-  if (temp >= 22.0)
+  if (temp > 23.00)
     digitalWrite(LED_TEMP, HIGH);
   else
     digitalWrite(LED_TEMP, LOW);
