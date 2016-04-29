@@ -5,8 +5,11 @@ import com.cassone.devmalin.ventilomolo.models.Temperature;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.Response;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface TemperatureService {
@@ -21,5 +24,6 @@ public interface TemperatureService {
     @GET("Temperature")
     Call<List<Temperature>> getAllTemperature(@Query("apiKey") String apiKey);
 
-
+    @POST("Temperature")
+    Call registerUser(@Field("max_temp") int max_temp, @Query("apiKey") String apiKey);
 }
