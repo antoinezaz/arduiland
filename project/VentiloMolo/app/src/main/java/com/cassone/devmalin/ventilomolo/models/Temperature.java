@@ -6,7 +6,7 @@ import com.cassone.devmalin.ventilomolo.models.Id;
 public class Temperature {
     private Id _id;
     private Double celcius, humidity;
-    private boolean isMotorActived;
+    private int isMotorActived;
 
     public Temperature(){
         celcius = humidity = 0.0;
@@ -36,11 +36,11 @@ public class Temperature {
         this.humidity = humidity;
     }
 
-    public boolean isMotorActived() {
+    public int isMotorActived() {
         return isMotorActived;
     }
 
-    public void setIsMotorActived(boolean isMotorActived) {
+    public void setIsMotorActived(int isMotorActived) {
         this.isMotorActived = isMotorActived;
     }
     /**
