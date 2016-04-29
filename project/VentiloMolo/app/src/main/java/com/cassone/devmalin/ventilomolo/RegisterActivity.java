@@ -7,7 +7,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import com.cassone.devmalin.ventilomolo.models.Id;
+import com.cassone.devmalin.ventilomolo.models.Setting;
 import com.cassone.devmalin.ventilomolo.models.Temperature;
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -22,18 +27,21 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.register_main);
 
         findViewById(R.id.edit_register).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TemperatureService temperatureService = SetupTempService.setupTempService();
-                Call<List<Temperature>> call = temperatureService.registerUser(
-                        Integer.valueOf(((EditText) findViewById(R.id.edit_max_temp)).getText().toString()),
-                        TemperatureService.API_KEY);
-                call.enqueue(new Callback<List<Temperature>>() {
+                Id id = new Id();
+                id.set$oid("5723140afca0fd7cf0f2736c");
+                Setting setting = new Setting();
+                setting.set_id(id);
+                setting.setMax_temp(Integer.valueOf(((EditText) findViewById(R.id.edit_max_temp)).getText().toString()));
+                Call<JSONObject> call = temperatureService.registerUser(TemperatureService.API_KEY, setting);
+                call.enqueue(new Callback<JSONObject>() {
                     @Override
-                    public void onResponse(Call<List<Temperature>> call, Response<List<Temperature>> response) {
+                    public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
                         if (!response.isSuccess()) {
                             Log.d("Register", "error");
                         } else {
@@ -43,7 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<List<Temperature>> call, Throwable t) {
+                    public void onFailure(Call<JSONObject> call, Throwable t) {
                         Log.d("Register", "Failure" + t.toString());
                     }
                 });
