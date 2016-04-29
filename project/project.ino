@@ -11,21 +11,25 @@
 
 #define DHTPIN 6
 #define DHTTYPE DHT11
-#define SLAVE_ADDRESS 0x55
+#define DATAS_ADDRESS 0x14
 
 DHT dht(DHTPIN, DHTTYPE);
 const int LED_TEMP = 12;
-int dataReceived = 0;
-float humidity;
+
 float temperature;
-//float farenheit;
+float limitTemperature = 23.00;
+float humidity;
+int   ledActive = 0;
+int   dataReceived = 0;
 
 void setup() {
   Serial.begin(9600);
   Serial.println("Start program...\n");
-  Wire.begin(SLAVE_ADDRESS);
+  
+  Wire.begin(DATAS_ADDRESS);
   Wire.onReceive(receiveData);
   Wire.onRequest(sendData);
+  
   pinMode(LED_TEMP, OUTPUT);
   dht.begin();
 }
@@ -35,15 +39,11 @@ void loop() {
 
   humidity = dht.readHumidity();
   temperature = dht.readTemperature();
-  //farenheit = dht.readTemperature(false); // Fareinheit
 
-  if (isnan(humidity) || isnan(temperature)) { // || isnan(farenheit)) {
+  if (isnan(humidity) || isnan(temperature)) { 
     Serial.println("Failed to read from DHT sensor!");
     return;
   }
-
-  // float hif = dht.computeHeatIndex(farenheit, humidity);
-  // float hic = dht.computeHeatIndex(temperature, humidity, false);
 
   Serial.print("Humidity: ");
   Serial.print(humidity);
@@ -51,13 +51,6 @@ void loop() {
   Serial.print("Temperature: ");
   Serial.print(temperature);
   Serial.print(" *C ");
-  /*Serial.print(farenheit);
-  Serial.print(" *F\t");
-  Serial.print("Heat index: ");
-  Serial.print(hic);
-  Serial.print(" *C ");
-  Serial.print(hif);
-  Serial.println(" *F");*/
 
   Serial.println("");
   isHot(temperature);
@@ -66,30 +59,40 @@ void loop() {
 void receiveData(int byteCount) {
     while(Wire.available()) {
         dataReceived = Wire.read();
-        Serial.print("Donnee recue : ");
+        Serial.print("Data received : ");
         Serial.println(dataReceived);
+        
+        if (dataReceived != 100
+          && dataReceived != 101
+          && dataReceived != 102) {
+            limitTemperature = dataReceived;
+        }
     }
 }
 
 void sendData() {
     float dataResponse;
     switch (dataReceived) {
-      case 0:
-        break;
-      case 1:
+      case 100:
         dataResponse = temperature;
         break;
-      case 2:
+      case 101:
         dataResponse = humidity;
+        break;
+      case 102:
+        dataResponse = ledActive;
         break;
     }
     Wire.write((byte) dataResponse);
 }
 
 void isHot(float temp) {
-  if (temp > 23.00)
+  if (temp > limitTemperature) {
+    ledActive = 1;
     digitalWrite(LED_TEMP, HIGH);
-  else
+  } else {
+    ledActive = 0;
     digitalWrite(LED_TEMP, LOW);
+  }
 }
 
