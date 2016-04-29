@@ -62,9 +62,9 @@ void receiveData(int byteCount) {
         Serial.print("Data received : ");
         Serial.println(dataReceived);
         
-        if (dataReceived != 100
-          && dataReceived != 101
-          && dataReceived != 102) {
+        if (dataReceived != 98
+          && dataReceived != 99
+          && dataReceived != 100) {
             limitTemperature = dataReceived;
         }
     }
@@ -73,13 +73,13 @@ void receiveData(int byteCount) {
 void sendData() {
     float dataResponse;
     switch (dataReceived) {
-      case 100:
+      case 98:
         dataResponse = temperature;
         break;
-      case 101:
+      case 99:
         dataResponse = humidity;
         break;
-      case 102:
+      case 100:
         dataResponse = ledActive;
         break;
     }
